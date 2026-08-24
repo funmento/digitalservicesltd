@@ -1,0 +1,3 @@
+import { AuthForm } from '@/components/AuthForm'
+export const metadata = { title: 'Sign in' }
+export default function LoginPage(){return <div className="auth-page"><div className="auth-copy"><span className="kicker light">Welcome back</span><h1>Return to<br/>clearer operations.</h1><p>Sign in to access your organisation, dashboards, and active ERP modules.</p><blockquote>“A single login now gives every team exactly the tools and information they need.”</blockquote></div><div className="auth-panel"><div><span className="kicker">Customer access</span><h2>Sign in</h2><p>Use your organisation account to continue.</p><AuthForm mode="login"/></div></div></div>}
