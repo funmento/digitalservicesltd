@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://digitalservicesltd.com/</loc></url>
+  <url><loc>https://digitalservicesltd.com/platform</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules</loc></url>
   <url><loc>https://digitalservicesltd.com/pricing</loc></url>
+  <url><loc>https://digitalservicesltd.com/industries</loc></url>
+  <url><loc>https://digitalservicesltd.com/demos</loc></url>
   <url><loc>https://digitalservicesltd.com/marketplace</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/crm</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/hr</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/payroll</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/inventory</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/projects</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/helpdesk</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/fleet</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/restaurant</loc></url>
+  <url><loc>https://digitalservicesltd.com/modules/healthcare</loc></url>
   <url><loc>https://digitalservicesltd.com/login</loc></url>
   <url><loc>https://digitalservicesltd.com/register</loc></url>
 </urlset>
