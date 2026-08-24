@@ -45,9 +45,9 @@ export function SiteHeader() {
       {isOpen && (
         <nav className="mobile-nav" aria-label="Mobile navigation">
           {navItems.map(([label, path]) => (
-            <Link key={path} to={path} onClick={() => setIsOpen(false)}>{label}</Link>
+            <Link key={path} to={path} activeProps={{ className: 'active' }} onClick={() => setIsOpen(false)}>{label}</Link>
           ))}
-          <Link to="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
+          <Link to="/contact" activeProps={{ className: 'active' }} onClick={() => setIsOpen(false)}>Contact</Link>
         </nav>
       )}
     </header>
