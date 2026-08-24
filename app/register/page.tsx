@@ -1,0 +1,3 @@
+import { AuthForm } from '@/components/AuthForm'
+export const metadata = { title: 'Start Free Trial' }
+export default function RegisterPage(){return <div className="auth-page"><div className="auth-copy"><span className="kicker light">14-day free trial</span><h1>Your operating system starts here.</h1><p>Set up your secure workspace, invite your team, and activate your first modules—no credit card required.</p><ul><li>Full platform access</li><li>Guided workspace setup</li><li>Import support included</li></ul></div><div className="auth-panel"><div><span className="kicker">Create your account</span><h2>Start Free Trial</h2><p>It takes less than two minutes.</p><AuthForm mode="register"/></div></div></div>}

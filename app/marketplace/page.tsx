@@ -1,0 +1,12 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { ArrowRight, Check, Plus, Search } from 'lucide-react'
+import { modules } from '@/components/product-data'
+
+export default function MarketplacePage() {
+  const [query,setQuery]=useState(''); const [selected,setSelected]=useState<string[]>(['crm','projects'])
+  const filtered=modules.filter(module=>`${module.name} ${module.description}`.toLowerCase().includes(query.toLowerCase()))
+  return <div className="page-wrap"><section className="market-hero"><div className="shell"><span className="kicker">Pay-as-you-go module marketplace</span><h1>Build capability.<br />One module at a time.</h1><p>Explore complete ERP products, start a free trial, and activate only the modules that create value for your business.</p><label className="market-search"><Search/><input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search modules or features"/></label></div></section><section className="shell marketplace-grid">{filtered.map(({id,name,description,price,icon:Icon,category,features})=>{const active=selected.includes(id);return <article id={id} className="market-module" key={id}><div className="market-module-head"><div className="module-icon"><Icon/></div><span>{category}</span></div><h2>{name}</h2><p>{description}</p><ul>{features.map(feature=><li key={feature}><Check/>{feature}</li>)}</ul><div className="market-module-price"><span>From <b>£{price}</b> / month</span><button className={active?'module-button active':'module-button'} onClick={()=>setSelected(active?selected.filter(item=>item!==id):[...selected,id])}>{active?<><Check/>Selected</>:<><Plus/>Add module</>}</button></div><div className="market-module-actions"><Link className="button" href={`/register?module=${id}`}>Start Free Trial</Link><Link className="button button-outline" href={`/#${id.includes('hr')?'hr-demo':id.includes('payroll')?'payroll-demo':id.includes('inventory')?'inventory-demo':'crm-demo'}`}>View Demo</Link></div></article>})}</section><section className="shell marketplace-total"><div><span>{selected.length} modules selected · plus £19 core platform</span><b>Estimated monthly total: £{19+modules.filter(module=>selected.includes(module.id)).reduce((sum,module)=>sum+module.price,0)}/month</b></div><Link className="button" href={`/checkout?modules=${selected.join(',')}`}>Build My ERP <ArrowRight/></Link></section></div>
+}

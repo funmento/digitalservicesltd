@@ -1,0 +1,7 @@
+'use client'
+
+import Link from 'next/link'
+import { BarChart3, Bell, Boxes, ChevronDown, CircleHelp, CreditCard, Gauge, LayoutGrid, LogOut, Search, Settings, Shield, UsersRound } from 'lucide-react'
+import { Brand } from './Brand'
+
+export function AppShell({children,section='Overview'}:{children:React.ReactNode;section?:string}){return <div className="app-shell"><aside className="app-sidebar"><Brand/><nav><small>WORKSPACE</small><Link className={section==='Overview'?'active':''} href="/dashboard"><Gauge/>Overview</Link><Link href="/dashboard"><UsersRound/>Customers</Link><Link href="/dashboard"><Boxes/>Operations</Link><Link href="/dashboard"><BarChart3/>Analytics</Link><small>MANAGE</small><Link className={section==='Modules'?'active':''} href="/marketplace"><LayoutGrid/>Modules</Link><Link className={section==='Admin'?'active':''} href="/admin"><Shield/>Admin portal</Link><Link href="/pricing"><CreditCard/>Subscription</Link></nav><div className="sidebar-bottom"><Link href="/#contact"><CircleHelp/>Help centre</Link><Link href="/"><LogOut/>Back to website</Link></div></aside><section className="app-main"><header className="app-topbar"><div><small>ACME OPERATIONS</small><b>{section}</b></div><label><Search/><input placeholder="Search workspace"/></label><div><button aria-label="Notifications"><Bell/></button><span>AK</span><b>Alex Khan</b><ChevronDown/></div></header>{children}</section></div>}
