@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions'
 import { getUser } from '@netlify/identity'
-import { eq, inArray } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 import Stripe from 'stripe'
 import { db } from '../../db/index.js'
 import { members, modules, tenants } from '../../db/schema.js'
@@ -16,7 +16,7 @@ export default async (request: Request, _context: Context) => {
   const [membership] = await db.select().from(members).where(eq(members.identityUserId, user.id)).limit(1)
   if (!membership) return Response.json({ error: 'Complete workspace onboarding first.' }, { status: 409 })
   const [tenant] = await db.select().from(tenants).where(eq(tenants.id, membership.tenantId)).limit(1)
-  const selectedModules = await db.select().from(modules).where(inArray(modules.id, moduleIds))
+  const selectedModules = await db.select().from(modules).where(and(inArray(modules.id, moduleIds), eq(modules.active, true)))
   if (!selectedModules.length) return Response.json({ error: 'No valid modules were selected.' }, { status: 400 })
   const stripe = new Stripe(secretKey)
   const session = await stripe.checkout.sessions.create({
@@ -27,7 +27,7 @@ export default async (request: Request, _context: Context) => {
       { price_data: { currency: 'gbp', recurring: { interval: 'month' }, product_data: { name: 'Digital Services ERP core platform' }, unit_amount: 1900 }, quantity: 1 },
       ...selectedModules.map(module => ({ price_data: { currency: 'gbp', recurring: { interval: 'month' as const }, product_data: { name: `${module.name} module`, metadata: { moduleId: module.id } }, unit_amount: module.monthlyPrice * 100 }, quantity: 1 })),
     ],
-    metadata: { tenantId: tenant.id, moduleIds: moduleIds.join(',') },
+    metadata: { tenantId: tenant.id, moduleIds: selectedModules.map(module => module.id).join(',') },
     success_url: `${new URL(request.url).origin}/dashboard?checkout=success`,
     cancel_url: `${new URL(request.url).origin}/marketplace?checkout=canceled`,
   })

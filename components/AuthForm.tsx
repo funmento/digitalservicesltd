@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useState } from 'react'
 import { AuthError, login, signup } from '@netlify/identity'
 import { ArrowRight, CheckCircle2, LockKeyhole } from 'lucide-react'
 
 export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,7 +21,8 @@ export function AuthForm({ mode }: { mode: 'login' | 'register' }) {
       if (mode === 'register') {
         const user = await signup(email, password, { full_name: String(data.get('name')) })
         if (!user.confirmedAt) { setMessage('Check your inbox to confirm your account, then sign in.'); return }
-        router.push('/onboarding')
+        const selectedModules = searchParams.get('modules') || searchParams.get('module')
+        router.push(selectedModules ? `/onboarding?modules=${encodeURIComponent(selectedModules)}` : '/onboarding')
       } else { await login(email, password); window.location.href = '/dashboard' }
     } catch (caught) { setError(caught instanceof AuthError ? caught.message : 'Unable to complete this request. Please try again.') }
     finally { setLoading(false) }
