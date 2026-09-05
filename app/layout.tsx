@@ -7,8 +7,8 @@ const manrope = Manrope({ subsets: ['latin'], variable: '--font-body' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' })
 
 export const metadata: Metadata = {
-  title: { default: 'Digital Services ERP | One platform. Every operation.', template: '%s | Digital Services ERP' },
-  description: 'A modular SaaS ERP for CRM, people, payroll, inventory, projects, service, fleet, hospitality, and healthcare operations.',
+  title: { default: 'Digital Services ERP | ERP App Store for SMEs', template: '%s | Digital Services ERP' },
+  description: 'Start with one ERP module and activate CRM, inventory, purchasing, delivery, manufacturing, accounting, HR, and more as your business grows.',
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

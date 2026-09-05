@@ -5,10 +5,10 @@ import { useMemo, useState } from 'react'
 import { ArrowRight, Check, Minus, Plus } from 'lucide-react'
 import { modules } from './product-data'
 
-const featuredIds = ['crm', 'payroll', 'inventory', 'hr', 'projects', 'helpdesk']
+const featuredIds = ['crm', 'inventory', 'purchasing', 'delivery', 'manufacturing', 'customer-portal']
 
 export function CostBuilder() {
-  const [selected, setSelected] = useState(['crm', 'payroll'])
+  const [selected, setSelected] = useState(['crm', 'inventory'])
   const [users, setUsers] = useState(10)
   const selectedModules = useMemo(() => modules.filter(module => selected.includes(module.id)), [selected])
   const userCost = Math.max(0, users - 10) * 4

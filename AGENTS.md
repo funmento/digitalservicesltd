@@ -45,3 +45,13 @@ Add new marketing pages as routes under `src/routes/`. Blog or knowledge-base co
 - The portfolio mockups are CSS-rendered to avoid unapproved or fabricated client screenshots.
 - The sitemap currently uses the assigned Netlify project URL and must be updated when a final custom domain is approved.
 - No database is required because the only persistent input is handled by Netlify Forms.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
