@@ -16,8 +16,8 @@ export function HomeMarketplace() {
   return <section className="home-marketplace" aria-labelledby="marketplace-title">
     <div className="shell">
       <div className="marketplace-intro">
-        <div><span className="kicker">Module marketplace</span><h2 id="marketplace-title">Your ERP.<br />Pick the parts.</h2></div>
-        <p>Every module is a complete business app. Activate only what you need today, then add more without moving data or changing platforms.</p>
+        <div><span className="kicker">ERP App Store</span><h2 id="marketplace-title">Module Marketplace</h2></div>
+        <p>Choose the apps your business needs now. Every module connects to the same workspace and is ready when you grow.</p>
       </div>
       <div className="storefront-grid">
         {homepageModules.map(({ id, shortName, description, price, usagePricing, icon: Icon, category }) => {
