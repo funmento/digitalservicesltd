@@ -80,18 +80,13 @@ export default function Home() {
     <section className="saas-hero">
       <div className="saas-hero-grid shell">
         <div className="saas-hero-copy">
-          <div className="eyebrow"><span className="eyebrow-dot" /> Digital Services ERP</div>
-          <h1>The ERP App Store <em>for SMEs</em></h1>
+          <div className="product-brand"><span aria-hidden="true" /><strong>Digital Services ERP</strong></div>
+          <h1>The ERP App Store <span>for SMEs</span></h1>
           <p className="saas-hero-lead">Start with what you need today.<br />Activate additional modules as your business grows.</p>
           <p className="saas-hero-support">Build your business operating system one module at a time.</p>
           <div className="saas-hero-actions">
             <Link className="button" href="/register">Start Free Trial <ArrowRight /></Link>
             <Link className="button button-outline" href="#contact"><Play /> Book Demo</Link>
-          </div>
-          <div className="saas-hero-proof">
-            <span><Check /> Activate modules individually</span>
-            <span><Check /> Pay only for what you need</span>
-            <span><Check /> Scale without switching systems</span>
           </div>
         </div>
 
@@ -120,7 +115,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="hero-edge-label">START SMALL <span /> ACTIVATE MODULES <span /> SCALE AS YOU GROW</div>
     </section>
 
     <HomeMarketplace />
