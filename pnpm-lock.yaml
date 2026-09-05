@@ -36,6 +36,9 @@ importers:
         specifier: ^22.5.0
         version: 22.5.0(@types/node@22.19.19)
     devDependencies:
+      '@netlify/plugin-nextjs':
+        specifier: 5.15.13
+        version: 5.15.13
       '@tailwindcss/postcss':
         specifier: ^4.3.3
         version: 4.3.3
@@ -426,6 +429,10 @@ packages:
   '@netlify/identity@2.0.0':
     resolution: {integrity: sha512-AX2zdazgfa9M/L22kgC5TpuVgofz9ZkK0W7JRIqmW/In6LyW6HzLS2K9a3CPXlfcjWm1JqEdmXoXze3VIjes6Q==}
     engines: {node: '>=22.12.0'}
+
+  '@netlify/plugin-nextjs@5.15.13':
+    resolution: {integrity: sha512-gBmWtgG13ZW4ytNMCvacfwZemtdtV/Ekc+6RBYvI5fndjmDvKxgFHylsw7oli+PHMGAtNqaJrN8QccGnDReu6A==}
+    engines: {node: '>=18.0.0'}
 
   '@netlify/runtime-utils@3.0.0':
     resolution: {integrity: sha512-OHo40+V3QZkR+UrDjqhN+LekrAby/dSSJxsvyYs9i88E/mSl3goB/ysoL+VYROm190egxmQyRYlHK7vL4GeHBQ==}
@@ -1359,6 +1366,8 @@ snapshots:
   '@netlify/identity@2.0.0':
     dependencies:
       gotrue-js: 1.0.1
+
+  '@netlify/plugin-nextjs@5.15.13': {}
 
   '@netlify/runtime-utils@3.0.0': {}
 
