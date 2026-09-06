@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions'
 import { and, eq } from 'drizzle-orm'
 import { db } from '../../../db/index.js'
 import { auditLogs, usageEvents } from '../../../db/schema.js'
-import { deliveryAssignments, deliveryEvents, deliveryJobs, deliveryProofs, deliveryStops } from '../../../db/delivery-schema.js'
+import { deliveryAssignments, deliveryDrivers, deliveryEvents, deliveryJobs, deliveryProofs, deliveryStops } from '../../../db/delivery-schema.js'
 import { canDispatch, deriveJobStatus, forbidden, requireDeliveryContext } from './shared.mjs'
 
 type StopAction = { stopId?: string; status?: 'out_for_delivery' | 'delivered' | 'delivery_failed'; failureReason?: string; recipientName?: string; proofType?: 'recipient_name' | 'signature' | 'photo' | 'otp'; storageKey?: string }
@@ -18,7 +18,8 @@ export default async (request: Request, _context: Context) => {
   if (!stop) return Response.json({ error: 'Delivery stop not found' }, { status: 404 })
   const [job] = await db.select().from(deliveryJobs).where(and(eq(deliveryJobs.id, stop.deliveryJobId), eq(deliveryJobs.tenantId, context.tenantId))).limit(1)
   const [assignment] = await db.select().from(deliveryAssignments).where(and(eq(deliveryAssignments.deliveryJobId, job.id), eq(deliveryAssignments.tenantId, context.tenantId))).limit(1)
-  const isAssignedDriver = assignment && assignment.deliveryDriverId && context.member.id === assignment.assignedByMemberId
+  const [driver] = assignment ? await db.select().from(deliveryDrivers).where(and(eq(deliveryDrivers.id, assignment.deliveryDriverId), eq(deliveryDrivers.tenantId, context.tenantId))).limit(1) : []
+  const isAssignedDriver = Boolean(driver?.memberId && driver.memberId === context.member.id)
   if (!canDispatch(context) && !isAssignedDriver) return forbidden()
   if (body.status === 'delivered' && !body.proofType) return Response.json({ error: 'Proof of delivery is required before completion' }, { status: 400 })
   if (body.status === 'delivery_failed' && !body.failureReason?.trim()) return Response.json({ error: 'A failure reason is required' }, { status: 400 })
