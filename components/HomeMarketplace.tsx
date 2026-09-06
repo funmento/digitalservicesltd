@@ -16,17 +16,23 @@ export function HomeMarketplace() {
   return <section className="home-marketplace" aria-labelledby="marketplace-title">
     <div className="shell">
       <div className="marketplace-intro">
-        <div><span className="kicker">ERP App Store</span><h2 id="marketplace-title">Module Marketplace</h2></div>
-        <p>Choose the apps your business needs now. Every module connects to the same workspace and is ready when you grow.</p>
+        <div><span className="kicker">Module marketplace</span><h2 id="marketplace-title">Choose only the modules you need today.</h2></div>
+        <div className="marketplace-message">
+          <p>Add more modules as your business grows.</p>
+          <ul><li><Check /> No complex ERP implementation.</li><li><Check /> No paying for unused features.</li></ul>
+        </div>
       </div>
       <div className="storefront-grid">
-        {homepageModules.map(({ id, shortName, description, price, usagePricing, icon: Icon, category }) => {
+        {homepageModules.map(({ id, slug, shortName, description, price, usagePricing, icon: Icon, category }) => {
           const active = selected.includes(id)
           return <article className={active ? 'storefront-card selected' : 'storefront-card'} key={id}>
             <div className="storefront-card-top"><span className={`storefront-icon storefront-icon-${id}`}><Icon /></span><small>{category}</small></div>
             <div><h3>{shortName}</h3><p>{description}</p></div>
             <div className="storefront-price"><small>STARTING AT</small><strong>£{price}</strong><span>/ month<small>{usagePricing}</small></span></div>
-            <button type="button" onClick={() => toggleModule(id)} aria-pressed={active}>{active ? <><Check /> Added to your ERP</> : <><Plus /> Activate Module</>}</button>
+            <div className="storefront-actions">
+              <button type="button" onClick={() => toggleModule(id)} aria-pressed={active}>{active ? <><Check /> Added to your ERP</> : <><Plus /> Activate Module</>}</button>
+              <Link href={`/modules/${slug}`} aria-label={`Learn more about ${shortName}`}>Learn More <ArrowRight /></Link>
+            </div>
           </article>
         })}
       </div>
