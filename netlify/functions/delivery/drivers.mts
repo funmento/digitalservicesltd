@@ -1,11 +1,11 @@
 import type { Config, Context } from '@netlify/functions'
 import { eq } from 'drizzle-orm'
 import { db } from '../../../db/index.js'
-import { auditLogs } from '../../../db/schema.js'
+import { auditLogs, members } from '../../../db/schema.js'
 import { deliveryDrivers, deliveryVehicles } from '../../../db/delivery-schema.js'
 import { canDispatch, forbidden, requireDeliveryContext } from './shared.mjs'
 
-type Resource = { kind?: 'driver' | 'vehicle'; name?: string; phone?: string; email?: string; registration?: string; capacityKg?: number }
+type Resource = { kind?: 'driver' | 'vehicle'; memberId?: string; name?: string; phone?: string; email?: string; registration?: string; capacityKg?: number }
 
 export default async (request: Request, _context: Context) => {
   const resolved = await requireDeliveryContext()
@@ -23,7 +23,8 @@ export default async (request: Request, _context: Context) => {
   const body = await request.json() as Resource
   if (body.kind === 'driver') {
     if (!body.name?.trim() || !body.phone?.trim()) return Response.json({ error: 'Driver name and phone are required' }, { status: 400 })
-    const [driver] = await db.insert(deliveryDrivers).values({ tenantId: context.tenantId, name: body.name.trim(), phone: body.phone.trim(), email: body.email?.trim() || null }).returning()
+    if (body.memberId) { const [member] = await db.select().from(members).where(eq(members.id, body.memberId)).limit(1); if (!member || member.tenantId !== context.tenantId) return Response.json({ error: 'Driver member must belong to this workspace' }, { status: 404 }) }
+    const [driver] = await db.insert(deliveryDrivers).values({ tenantId: context.tenantId, memberId: body.memberId || null, name: body.name.trim(), phone: body.phone.trim(), email: body.email?.trim() || null }).returning()
     await db.insert(auditLogs).values({ tenantId: context.tenantId, memberId: context.member.id, action: 'delivery.driver.created', entityType: 'delivery_driver', entityId: driver.id })
     return Response.json({ driver }, { status: 201 })
   }
