@@ -23,3 +23,11 @@ test('entitlement is required before every protected delivery operation', async 
   assert.match(shared, /tenantModules\.moduleId, 'delivery'/)
   assert.match(shared, /tenantModules\.enabled, true/)
 })
+
+
+test('public tracking selects only safe fields', async () => {
+  const tracking = await read('netlify/functions/delivery/tracking.mts')
+  assert.match(tracking, /reference: deliveryJobs\.reference/)
+  assert.doesNotMatch(tracking, /recipientPhone/)
+  assert.doesNotMatch(tracking, /storageKey/)
+})
