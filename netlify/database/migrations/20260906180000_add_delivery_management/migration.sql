@@ -13,4 +13,4 @@ CREATE UNIQUE INDEX "delivery_driver_member_tenant_idx" ON "delivery_drivers" ("
 CREATE UNIQUE INDEX "delivery_vehicle_registration_tenant_idx" ON "delivery_vehicles" ("tenant_id","registration");
 CREATE UNIQUE INDEX "delivery_job_reference_tenant_idx" ON "delivery_jobs" ("tenant_id","reference");
 CREATE UNIQUE INDEX "delivery_stop_sequence_job_idx" ON "delivery_stops" ("delivery_job_id","sequence");
-CREATE UNIQUE INDEX "active_delivery_assignment_job_idx" ON "delivery_assignments" ("delivery_job_id","unassigned_at");
+CREATE UNIQUE INDEX "active_delivery_assignment_job_idx" ON "delivery_assignments" ("delivery_job_id") WHERE "unassigned_at" IS NULL;
