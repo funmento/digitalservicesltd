@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { ContactForm } from '@/components/ContactForm'
 import { HomeMarketplace } from '@/components/HomeMarketplace'
+import { ErpRoadmap } from '@/components/ErpRoadmap'
 
 const steps = [
   { number: '01', title: 'Create Your Workspace', text: 'Set up your secure company account and invite your team.', icon: Store },
@@ -104,6 +105,8 @@ export default function Home() {
     </section>
 
     <HomeMarketplace />
+
+    <ErpRoadmap compact />
 
     <section className="product-proof" aria-label="Digital Services ERP product facts">
       <div className="shell product-proof-grid">

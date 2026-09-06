@@ -1,46 +1,45 @@
-'use client'
-
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
-import { ArrowRight, Check, Plus } from 'lucide-react'
+import { ArrowRight, CalendarDays, Check } from 'lucide-react'
 import { homepageModules } from './product-data'
+import { ModuleStatusBadge } from './ModuleStatusBadge'
+
+function moduleCtaHref(module: (typeof homepageModules)[number]) {
+  if (module.status === 'LIVE') return `/register?module=${module.id}`
+  if (module.status === 'PLANNED') return '#erp-roadmap'
+  return `/modules/${module.slug}#module-interest`
+}
 
 export function HomeMarketplace() {
-  const [selected, setSelected] = useState<string[]>([])
-  const total = useMemo(() => homepageModules.filter(module => selected.includes(module.id)).reduce((sum, module) => sum + module.price, 19), [selected])
-
-  function toggleModule(id: string) {
-    setSelected(current => current.includes(id) ? current.filter(moduleId => moduleId !== id) : [...current, id])
-  }
-
   return <section className="home-marketplace" aria-labelledby="marketplace-title">
     <div className="shell">
       <div className="marketplace-intro">
-        <div><span className="kicker">Module marketplace</span><h2 id="marketplace-title">Choose only the modules you need today.</h2></div>
+        <div><span className="kicker">Module marketplace</span><h2 id="marketplace-title">A working ERP that grows release by release.</h2></div>
         <div className="marketplace-message">
-          <p>Add more modules as your business grows.</p>
-          <ul><li><Check /> No complex ERP implementation.</li><li><Check /> No paying for unused features.</li></ul>
+          <p>Delivery Management is live now. CRM is already in early access, with the next operational modules visibly moving through the roadmap.</p>
+          <ul><li><Check /> Start with software available today.</li><li><Check /> See exactly what is launching next.</li></ul>
         </div>
       </div>
       <div className="storefront-grid">
-        {homepageModules.map(({ id, slug, shortName, description, price, usagePricing, icon: Icon, category }) => {
-          const active = selected.includes(id)
-          return <article className={active ? 'storefront-card selected' : 'storefront-card'} key={id}>
-            <div className="storefront-card-top"><span className={`storefront-icon storefront-icon-${id}`}><Icon /></span><small>{category}</small></div>
-            <div><h3>{shortName}</h3><p>{description}</p></div>
-            <div className="storefront-price"><small>STARTING AT</small><strong>£{price}</strong><span>/ month<small>{usagePricing}</small></span></div>
+        {homepageModules.map(module => {
+          const Icon = module.icon
+          return <article className={module.featured ? 'storefront-card storefront-featured' : 'storefront-card'} key={module.id}>
+            {module.featured && <span className="featured-module-label">Featured Module</span>}
+            <div className="storefront-card-top"><span className={`storefront-icon storefront-icon-${module.id}`}><Icon /></span><ModuleStatusBadge status={module.status} label={module.statusLabel} /></div>
+            <div><small className="module-category">{module.category}</small><h3>{module.name}</h3><p>{module.description}</p></div>
+            {module.featured && <ul className="featured-capabilities">{module.features.map(feature => <li key={feature}><Check />{feature}</li>)}</ul>}
+            <div className="storefront-price"><small>STARTING AT</small><strong>£{module.price}</strong><span>/ month<small>{module.usagePricing}</small></span></div>
             <div className="storefront-actions">
-              <button type="button" onClick={() => toggleModule(id)} aria-pressed={active}>{active ? <><Check /> Added to your ERP</> : <><Plus /> Activate Module</>}</button>
-              <Link href={`/modules/${slug}`} aria-label={`Learn more about ${shortName}`}>Learn More <ArrowRight /></Link>
+              <Link className="storefront-primary" href={moduleCtaHref(module)}>{module.ctaLabel} <ArrowRight /></Link>
+              {module.featured ? <Link href="/#contact"><CalendarDays /> Book Demo</Link> : <Link href={`/modules/${module.slug}`} aria-label={`View ${module.name} details`}>View Module <ArrowRight /></Link>}
             </div>
           </article>
         })}
       </div>
       <div className="marketplace-build-bar">
-        <div><span>{selected.length ? `${selected.length} module${selected.length === 1 ? '' : 's'} selected` : 'Start with any module'}</span><strong>Estimated from £{total}/month</strong><small>Includes the £19 secure workspace</small></div>
-        <Link className="button button-white" href={selected.length ? `/register?modules=${selected.join(',')}` : '/register'}>Start Free Trial <ArrowRight /></Link>
+        <div><span>Start with the flagship module</span><strong>Delivery Management is live from £29/month</strong><small>CRM early access and a transparent release roadmap are already open.</small></div>
+        <Link className="button button-white" href="/register?module=delivery">Start Free Trial <ArrowRight /></Link>
       </div>
-      <Link className="marketplace-browse-link" href="/marketplace">Explore all 10 modules <ArrowRight /></Link>
+      <Link className="marketplace-browse-link" href="/marketplace">Explore the ERP App Store <ArrowRight /></Link>
     </div>
   </section>
 }
