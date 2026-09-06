@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "typecheck": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "test:delivery": "node --test tests/delivery/*.test.mjs"
   },
   "dependencies": {
     "@netlify/database": "^2.0.0",
