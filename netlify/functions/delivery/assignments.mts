@@ -1,5 +1,5 @@
 import type { Config, Context } from '@netlify/functions'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, isNull } from 'drizzle-orm'
 import { db } from '../../../db/index.js'
 import { auditLogs } from '../../../db/schema.js'
 import { deliveryAssignments, deliveryDrivers, deliveryEvents, deliveryJobs, deliveryStops, deliveryVehicles } from '../../../db/delivery-schema.js'
@@ -22,7 +22,7 @@ export default async (request: Request, _context: Context) => {
     const [vehicle] = await db.select().from(deliveryVehicles).where(and(eq(deliveryVehicles.id, body.vehicleId), eq(deliveryVehicles.tenantId, context.tenantId), eq(deliveryVehicles.active, true))).limit(1)
     if (!vehicle) return Response.json({ error: 'Vehicle was not found in this workspace' }, { status: 404 })
   }
-  await db.update(deliveryAssignments).set({ unassignedAt: new Date() }).where(and(eq(deliveryAssignments.deliveryJobId, job.id), eq(deliveryAssignments.tenantId, context.tenantId), eq(deliveryAssignments.unassignedAt, null)))
+  await db.update(deliveryAssignments).set({ unassignedAt: new Date() }).where(and(eq(deliveryAssignments.deliveryJobId, job.id), eq(deliveryAssignments.tenantId, context.tenantId), isNull(deliveryAssignments.unassignedAt)))
   const [assignment] = await db.insert(deliveryAssignments).values({ tenantId: context.tenantId, deliveryJobId: job.id, deliveryDriverId: driver.id, deliveryVehicleId: body.vehicleId || null, assignedByMemberId: context.member.id }).returning()
   await db.update(deliveryStops).set({ status: 'assigned' }).where(and(eq(deliveryStops.deliveryJobId, job.id), eq(deliveryStops.tenantId, context.tenantId)))
   await db.update(deliveryJobs).set({ status: 'assigned', updatedAt: new Date() }).where(eq(deliveryJobs.id, job.id))
