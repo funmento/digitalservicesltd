@@ -32,7 +32,8 @@ export default async (request: Request, _context: Context) => {
   await db.update(deliveryJobs).set({ status: jobStatus, completedAt: jobStatus === 'delivered' ? new Date() : null, updatedAt: new Date() }).where(eq(deliveryJobs.id, job.id))
   await db.insert(deliveryEvents).values({ tenantId: context.tenantId, deliveryJobId: job.id, deliveryStopId: stop.id, eventType: `delivery.stop.${body.status}`, actorMemberId: context.member.id, metadata: { failureReason: body.failureReason || null } })
   await db.insert(auditLogs).values({ tenantId: context.tenantId, memberId: context.member.id, action: `delivery.stop.${body.status}`, entityType: 'delivery_stop', entityId: stop.id, metadata: { jobId: job.id } })
-  if (body.status === 'delivered' || body.status === 'delivery_failed') await db.insert(usageEvents).values({ tenantId: context.tenantId, moduleId: 'delivery', metric: 'delivery_stops_completed', quantity: 1 })
+  if (body.status === 'delivered') await db.insert(usageEvents).values({ tenantId: context.tenantId, moduleId: 'delivery', metric: 'delivery_stops_delivered', quantity: 1 })
+  if (body.status === 'delivery_failed') await db.insert(usageEvents).values({ tenantId: context.tenantId, moduleId: 'delivery', metric: 'delivery_stops_failed', quantity: 1 })
   return Response.json({ jobId: job.id, jobStatus, stopStatus: body.status })
 }
 export const config: Config = { path: '/api/delivery/stops' }
