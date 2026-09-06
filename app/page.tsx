@@ -6,22 +6,16 @@ import {
   CheckCircle2,
   ChevronRight,
   CircleX,
-  Factory,
   Layers3,
-  MapPinCheck,
   PackageOpen,
   Play,
-  Route,
-  ScanLine,
   ShieldCheck,
   Sparkles,
   Store,
   Truck,
   UsersRound,
-  UtensilsCrossed,
   Workflow,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { ContactForm } from '@/components/ContactForm'
 import { HomeMarketplace } from '@/components/HomeMarketplace'
 
@@ -32,47 +26,39 @@ const steps = [
   { number: '04', title: 'Activate More Modules As You Grow', text: 'Add capabilities instantly without replacing your system.', icon: Sparkles },
 ]
 
-const deliveryFeatures: { label: string; icon: LucideIcon }[] = [
-  { label: 'Driver Assignment', icon: UsersRound },
-  { label: 'Delivery Tracking', icon: Route },
-  { label: 'Customer Tracking Links', icon: MapPinCheck },
-  { label: 'Proof of Delivery', icon: ScanLine },
-  { label: 'Delivered Timestamp', icon: CheckCircle2 },
-  { label: 'Automatic Completion', icon: Workflow },
-]
-
-const industries: { name: string; icon: LucideIcon; detail: string }[] = [
-  { name: 'Manufacturing', icon: Factory, detail: 'Production, materials and work orders' },
-  { name: 'Food Production', icon: UtensilsCrossed, detail: 'Batch control and delivery visibility' },
-  { name: 'Retail', icon: Store, detail: 'Stock, purchasing and customer data' },
-  { name: 'Logistics', icon: Truck, detail: 'Drivers, routes and proof of delivery' },
-  { name: 'Distribution', icon: PackageOpen, detail: 'Warehouses, orders and fulfilment' },
-  { name: 'Professional Services', icon: UsersRound, detail: 'CRM, projects and reporting' },
-]
-
 const pricing = [
   {
-    name: 'Starter',
-    eyebrow: 'Start focused',
+    name: 'Core workspace',
+    eyebrow: 'SaaS platform',
     price: '£19',
-    description: 'A secure ERP workspace for small teams ready to activate their first module.',
-    features: ['10 users included', 'Choose any paid module', 'Monthly billing', '14-day free trial'],
+    suffix: '/ month',
+    description: 'Your secure company workspace connects every module, user, permission, and shared record.',
+    features: ['10 users included', 'One connected data foundation', 'Monthly billing', '14-day free trial'],
   },
   {
-    name: 'Growth',
-    eyebrow: 'Most popular',
-    price: '£19',
-    description: 'The same connected core with more modules, users and usage as operations expand.',
-    features: ['Unlimited module activation', 'Module-based pricing', 'Usage-based allowances', 'Priority support'],
+    name: 'Business modules',
+    eyebrow: 'Choose individually',
+    price: 'From £19',
+    suffix: '/ module / month',
+    description: 'Activate CRM, Inventory, Purchasing, Delivery, Manufacturing, or Customer Portal separately.',
+    features: ['Pay only for activated modules', 'Clear starting prices', 'Connected from day one', 'Add modules when needed'],
     featured: true,
   },
   {
-    name: 'Enterprise',
-    eyebrow: 'Built to fit',
-    price: 'Custom',
-    description: 'Commercial flexibility and rollout support for complex or multi-team operations.',
-    features: ['Volume pricing', 'Advanced permissions', 'Onboarding support', 'Custom usage limits'],
+    name: 'Scale over time',
+    eyebrow: 'Grow at your pace',
+    price: 'Monthly',
+    suffix: 'activation',
+    description: 'Start with one useful workflow and expand your ERP on the same SaaS platform as demand grows.',
+    features: ['No all-at-once rollout', 'No unused module bundle', 'Shared users and permissions', 'One monthly platform'],
   },
+]
+
+const productFacts = [
+  { value: '10', label: 'Business modules available' },
+  { value: '£19', label: 'Core workspace per month' },
+  { value: '14 days', label: 'Free trial before billing' },
+  { value: '1', label: 'Connected SaaS platform' },
 ]
 
 export default function Home() {
@@ -119,6 +105,12 @@ export default function Home() {
 
     <HomeMarketplace />
 
+    <section className="product-proof" aria-label="Digital Services ERP product facts">
+      <div className="shell product-proof-grid">
+        {productFacts.map(fact => <div key={fact.label}><strong>{fact.value}</strong><span>{fact.label}</span></div>)}
+      </div>
+    </section>
+
     <section className="saas-section how-section">
       <div className="shell">
         <div className="saas-section-heading">
@@ -143,32 +135,11 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="saas-section delivery-section">
-      <div className="shell delivery-grid">
-        <div className="delivery-product">
-          <div className="delivery-product-head"><span className="delivery-icon"><Truck /></span><div><small>FEATURED MODULE</small><h3>Delivery Management</h3></div><em>£39 / month</em></div>
-          <div className="route-card">
-            <div className="route-line"><span className="route-start" /><i /><i /><span className="route-end"><Check /></span></div>
-            <div className="route-stops"><div><small>09:12</small><strong>Assigned</strong><span>Driver: M. Clarke</span></div><div><small>10:38</small><strong>In transit</strong><span>Customer notified</span></div><div><small>11:04</small><strong>Delivered</strong><span>Proof captured</span></div></div>
-          </div>
-          <div className="delivery-proof"><div><span>SIGNATURE CAPTURED</span><strong>Harbour Foods Ltd.</strong></div><CheckCircle2 /></div>
-        </div>
-        <div className="delivery-copy"><span className="kicker">Featured module</span><h2>Every delivery visible from dispatch to doorstep.</h2><p>Give dispatchers, drivers and customers one accurate view of every order in motion.</p><div className="delivery-features">{deliveryFeatures.map(({ label, icon: Icon }) => <span key={label}><Icon /> {label}</span>)}</div><Link className="button" href="/modules/delivery">View Delivery Module <ArrowRight /></Link></div>
-      </div>
-    </section>
-
-    <section className="saas-section industries-section">
-      <div className="shell">
-        <div className="saas-section-heading compact"><div><span className="kicker">Industry solutions</span><h2>Built around how your business moves.</h2></div><Link className="text-arrow" href="/industries">Explore industries <ArrowRight /></Link></div>
-        <div className="industry-grid">{industries.map(({ name, icon: Icon, detail }) => <Link href="/industries" key={name}><span><Icon /></span><div><h3>{name}</h3><p>{detail}</p></div><ArrowRight /></Link>)}</div>
-      </div>
-    </section>
-
     <section className="saas-section pricing-section" id="pricing">
       <div className="shell">
-        <div className="saas-section-heading"><div><span className="kicker">Simple pricing</span><h2>A platform that grows with you.</h2></div><p>Monthly billing combines a secure base workspace, the modules you activate and transparent usage allowances. Every plan starts with a free trial.</p></div>
-        <div className="pricing-grid">{pricing.map(plan => <article className={plan.featured ? 'featured' : ''} key={plan.name}><span className="pricing-eyebrow">{plan.eyebrow}</span><h3>{plan.name}</h3><div className="pricing-price"><strong>{plan.price}</strong>{plan.price !== 'Custom' && <span>/ month<br />+ chosen modules</span>}</div><p>{plan.description}</p><ul>{plan.features.map(feature => <li key={feature}><Check /> {feature}</li>)}</ul><Link className={plan.featured ? 'button' : 'button button-outline'} href={plan.name === 'Enterprise' ? '#contact' : '/register'}>{plan.name === 'Enterprise' ? 'Talk to Sales' : 'Start Free Trial'} <ArrowRight /></Link></article>)}</div>
-        <p className="pricing-note">Module prices start from £19/month. Usage-based charges apply only when included allowances are exceeded.</p>
+        <div className="saas-section-heading"><div><span className="kicker">Simple modular pricing</span><h2>One workspace. Only the modules you choose.</h2></div><p>Your monthly total is the £19 core workspace plus the modules you activate. Start small, then add capabilities without changing platforms.</p></div>
+        <div className="pricing-grid">{pricing.map(plan => <article className={plan.featured ? 'featured' : ''} key={plan.name}><span className="pricing-eyebrow">{plan.eyebrow}</span><h3>{plan.name}</h3><div className="pricing-price"><strong>{plan.price}</strong><span>{plan.suffix}</span></div><p>{plan.description}</p><ul>{plan.features.map(feature => <li key={feature}><Check /> {feature}</li>)}</ul><Link className={plan.featured ? 'button' : 'button button-outline'} href={plan.featured ? '/marketplace' : '/register'}>{plan.featured ? 'Choose Modules' : 'Start Free Trial'} <ArrowRight /></Link></article>)}</div>
+        <p className="pricing-note">Usage-based charges apply only when the included allowance for an activated module is exceeded.</p>
       </div>
     </section>
 
