@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 
-const productRoutes = ['/dashboard', '/admin']
+const productRoutes = ['/dashboard', '/admin', '/delivery']
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
