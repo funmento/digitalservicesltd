@@ -2,11 +2,39 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Check, Plus, Search } from 'lucide-react'
-import { modules } from '@/components/product-data'
+import { ArrowRight, CalendarDays, Check, Search } from 'lucide-react'
+import { ErpRoadmap } from '@/components/ErpRoadmap'
+import { ModuleStatusBadge } from '@/components/ModuleStatusBadge'
+import { marketplaceModules } from '@/components/product-data'
+
+function moduleCtaHref(module: (typeof marketplaceModules)[number]) {
+  if (module.status === 'LIVE') return `/register?module=${module.id}`
+  if (module.status === 'PLANNED') return '#erp-roadmap'
+  return `/modules/${module.slug}#module-interest`
+}
 
 export default function MarketplacePage() {
-  const [query,setQuery]=useState(''); const [selected,setSelected]=useState<string[]>([])
-  const filtered=modules.filter(module=>`${module.name} ${module.description}`.toLowerCase().includes(query.toLowerCase()))
-  return <div className="page-wrap"><section className="market-hero"><div className="shell"><span className="kicker">Digital Services ERP App Store</span><h1>Start with one.<br />Add the rest later.</h1><p>Activate complete business modules on demand. Every app shares the same company workspace, users, permissions, and data foundation.</p><label className="market-search"><Search/><input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search modules or features"/></label></div></section><section className="shell marketplace-grid">{filtered.map(({id,name,description,price,usagePricing,icon:Icon,category,features})=>{const active=selected.includes(id);return <article id={id} className="market-module" key={id}><div className="market-module-head"><div className="module-icon"><Icon/></div><span>{category}</span></div><h2><Link href={`/modules/${id}`}>{name}</Link></h2><p>{description}</p><ul>{features.map(feature=><li key={feature}><Check/>{feature}</li>)}</ul><div className="market-module-price"><span>From <b>£{price}</b> / month<small>{usagePricing}</small></span><button className={active?'module-button active':'module-button'} onClick={()=>setSelected(active?selected.filter(item=>item!==id):[...selected,id])}>{active?<><Check/>Selected</>:<><Plus/>Activate Module</>}</button></div><div className="market-module-actions"><Link className="button" href={`/register?module=${id}`}>Start Free Trial</Link><Link className="button button-outline" href={`/modules/${id}`}>View Module</Link></div></article>})}</section><section className="shell marketplace-total"><div><span>{selected.length} modules selected · plus £19 core platform</span><b>Estimated monthly total: £{19+modules.filter(module=>selected.includes(module.id)).reduce((sum,module)=>sum+module.price,0)}/month</b></div><Link className="button" href={selected.length?`/checkout?modules=${selected.join(',')}`:'/register'}>{selected.length?'Activate Selected':'Start Free Trial'} <ArrowRight/></Link></section></div>
+  const [query, setQuery] = useState('')
+  const filtered = marketplaceModules.filter(module => `${module.name} ${module.description} ${module.features.join(' ')}`.toLowerCase().includes(query.toLowerCase()))
+
+  return <div className="page-wrap marketplace-page">
+    <section className="market-hero"><div className="shell"><span className="kicker">Digital Services ERP App Store</span><h1>Available now.<br />Growing in public.</h1><p>Start with a production-ready delivery workflow, join the next release early, and see exactly where every connected ERP module sits.</p><label className="market-search"><Search /><span className="sr-only">Search modules or features</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search modules or features" /></label></div></section>
+    <section className="shell marketplace-grid" aria-label="ERP modules">
+      {filtered.map(module => {
+        const Icon = module.icon
+        return <article id={module.id} className={module.featured ? 'market-module market-module-featured' : 'market-module'} key={module.id}>
+          {module.featured && <span className="featured-module-label">Featured Module</span>}
+          <div className="market-module-head"><div className="module-icon"><Icon /></div><ModuleStatusBadge status={module.status} label={module.statusLabel} /></div>
+          <span className="module-category">{module.category}</span>
+          <h2><Link href={`/modules/${module.slug}`}>{module.name}</Link></h2>
+          <p>{module.description}</p>
+          <ul>{module.features.map(feature => <li key={feature}><Check />{feature}</li>)}</ul>
+          <div className="market-module-price"><span>From <b>£{module.price}</b> / month<small>{module.usagePricing}</small></span><small>{module.roadmapPosition}</small></div>
+          <div className="market-module-actions"><Link className="button" href={moduleCtaHref(module)}>{module.ctaLabel} <ArrowRight /></Link>{module.featured ? <Link className="button button-outline" href="/#contact"><CalendarDays /> Book Demo</Link> : <Link className="button button-outline" href={`/modules/${module.slug}`}>View Module</Link>}</div>
+        </article>
+      })}
+      {!filtered.length && <div className="marketplace-empty"><Search /><h2>No matching modules yet.</h2><p>Try a broader workflow or feature term. The roadmap is expanding as the platform grows.</p></div>}
+    </section>
+    <ErpRoadmap />
+  </div>
 }
